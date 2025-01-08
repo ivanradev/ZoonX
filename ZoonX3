@@ -1,0 +1,49 @@
+let cart = [];
+let cartButton = document.getElementById("cartButton");
+let cartModal = document.getElementById("cartModal");
+let cartItems = document.getElementById("cartItems");
+let totalPriceElement = document.getElementById("totalPrice");
+let checkoutButton = document.getElementById("checkoutButton");
+let closeCartButton = document.getElementById("closeCart");
+
+document.querySelectorAll(".addToCart").forEach(button => {
+    button.addEventListener("click", function() {
+        let productId = this.getAttribute("data-product");
+        let price = parseFloat(this.getAttribute("data-price"));
+        
+        // Добавяне на продукта в кошницата
+        cart.push({ productId, price });
+        updateCart();
+    });
+});
+
+cartButton.addEventListener("click", function() {
+    cartModal.style.display = "flex";
+});
+
+closeCartButton.addEventListener("click", function() {
+    cartModal.style.display = "none";
+});
+
+checkoutButton.addEventListener("click", function() {
+    alert("Поръчката е завършена!");
+    cart = []; // Изчистване на кошницата след поръчка
+    updateCart();
+    cartModal.style.display = "none";
+});
+
+function updateCart() {
+    // Обновяване на съдържанието на кошницата
+    cartItems.innerHTML = "";
+    let totalPrice = 0;
+    
+    cart.forEach(item => {
+        let listItem = document.createElement("li");
+        listItem.textContent = `Продукт ID: ${item.productId}, Цена: ${item.price} лв`;
+        cartItems.appendChild(listItem);
+        totalPrice += item.price;
+    });
+
+    cartButton.textContent = `Кошница (${cart.length})`;
+    totalPriceElement.textContent = `Обща сума: ${totalPrice} лв`;
+}
